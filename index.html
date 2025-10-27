@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Preços</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #002D58;
+            --hover-color: #1C4A69;
+            --accent-color: #516E8E;
+            --bg-light: #FAFAFB;
+            --surface-color: #FFFFFF;
+            --border-color: #E1E3E8;
+            --text-primary: #0F1012;
+            --text-secondary: #5C6975;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            touch-action: manipulation;
+        }
+
+        .container-tablet {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            background: var(--surface-color);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 45, 88, 0.08);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .fields-container {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .field-group {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .search-box label {
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .search-box input {
+            font-size: 1.2rem;
+            padding: 0.8rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            touch-action: manipulation;
+            color: var(--text-primary);
+            width: 100%;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(0, 45, 88, 0.15);
+            outline: none;
+        }
+
+        .produto-card {
+            background: var(--surface-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 45, 88, 0.08);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            min-height: 180px;
+            border: 1px solid var(--border-color);
+            transition: box-shadow 0.3s ease, border-color 0.3s ease, opacity 0.3s ease;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .produto-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 45, 88, 0.12);
+            border-color: var(--accent-color);
+        }
+
+        .produto-img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .produto-info {
+            flex: 1;
+        }
+
+        .produto-nome {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+        }
+
+        .produto-preco {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .produto-detalhes {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .produto-detalhes-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .produto-detalhes-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 0.2rem;
+            font-weight: 500;
+        }
+
+        .produto-detalhes-valor {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--hover-color);
+        }
+
+        .alert-busca {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        .alert-error {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            padding: 1.2rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 1.15rem;
+            font-weight: 500;
+            box-shadow: 0 3px 10px rgba(220, 53, 69, 0.25);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .reseller-banner {
+            background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+            padding: 1.2rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 3px 10px rgba(0, 45, 88, 0.15);
+        }
+
+        .reseller-info {
+            color: var(--surface-color);
+            font-size: 1.15rem;
+            text-align: center;
+            font-weight: 400;
+        }
+
+        .reseller-info strong {
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .container-tablet {
+                padding: 1rem;
+            }
+
+            .fields-container {
+                flex-direction: column;
+            }
+
+            .field-group {
+                min-width: 100%;
+            }
+
+            .produto-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .produto-detalhes {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-tablet">
+        <h2>Consulta de Preços</h2>
+
+        <!-- Container for search fields -->
+        <div class="search-box">
+            <div class="fields-container">
+                <!-- Reseller identification field (RE) -->
+                <div id="reGroup" class="field-group" style="display: none;">
+                    <label for="reInput" class="form-label">Identificação da Revendedora</label>
+                    <input type="tel" class="form-control" id="reInput" placeholder="Digite o código ou CPF"
+                        autocomplete="off" inputmode="numeric" pattern="[0-9]*">
+                </div>
+
+                <!-- Product search field -->
+                <div id="productGroup" class="field-group">
+                    <label for="productSearch" class="form-label">Buscar Produto</label>
+                    <input type="tel" class="form-control" id="productSearch"
+                        placeholder="Digite ou escaneie o código ou EAN" autocomplete="off" inputmode="numeric"
+                        pattern="[0-9]*">
+                </div>
+            </div>
+        </div>
+
+        <div id="products"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="products.js"></script>
+    <script src="resellers.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
