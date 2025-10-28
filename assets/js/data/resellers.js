@@ -1,5 +1,3 @@
-// Reseller data for identification
-// Classification levels: Bronze, Prata, Ouro, Platina, Rubi, Esmeralda, Diamante
 const resellers = [
   {
     "code": "1001",

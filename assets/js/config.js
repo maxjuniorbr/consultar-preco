@@ -1,6 +1,10 @@
 const DISPLAY_TIME_SECONDS = 10;
 const MAX_DISPLAYED_PRODUCTS = 1;
 const SESSION_TIMEOUT_SECONDS = 10;
+const SESSION_TIMER_CONFIG = {
+    showTimer: false,
+    showResetButton: true
+};
 const RESELLER_BANNER_CONFIG = {
     showClassification: true,
     showDiscount: true,

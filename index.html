@@ -23,50 +23,53 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema de consulta de preços para revendedoras">
     <title>Consulta de Preços</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
 </head>
 
 <body>
-    <main class="container-tablet">
+    <main class="container-tablet" role="main">
+        <h1 class="visually-hidden">Sistema de Consulta de Preços</h1>
         <h2>Consulta de Preços</h2>
 
-        <!-- Container for search fields -->
         <section class="search-box" aria-labelledby="search-heading">
             <h3 id="search-heading" class="visually-hidden">Controles de Busca</h3>
             <div class="fields-container">
-                <!-- Reseller identification field (RE) -->
                 <div id="reGroup" class="field-group" style="display: none;">
                     <label for="reInput" class="form-label">Identificação da Revendedora</label>
                     <input type="tel" class="form-control" id="reInput" placeholder="Digite o código ou CPF"
-                        autocomplete="off" inputmode="numeric" pattern="[0-9]*">
-                    <div id="sessionTimer" class="session-timer" style="display: none;"></div>
+                        autocomplete="off" inputmode="numeric" pattern="[0-9]*"
+                        aria-label="CPF ou código da revendedora"
+                        aria-describedby="sessionTimer"
+                        tabindex="1">
+                    <div id="sessionTimer" class="session-timer" style="display: none;" role="status" aria-live="polite"></div>
+                    <button id="resetSessionBtn" type="button" style="display: none;" 
+                        aria-label="Limpar identificação da revendedora e iniciar nova consulta"
+                        tabindex="3">
+                        Limpar Revendedora
+                    </button>
                 </div>
 
-                <!-- Product search field -->
                 <div id="productGroup" class="field-group">
                     <label for="productSearch" class="form-label">Buscar Produto</label>
                     <input type="tel" class="form-control" id="productSearch"
                         placeholder="Digite ou escaneie o código ou EAN" autocomplete="off" inputmode="numeric"
-                        pattern="[0-9]*">
+                        pattern="[0-9]*"
+                        aria-label="Código ou EAN do produto"
+                        tabindex="2">
                 </div>
             </div>
         </section>
 
-        <section id="products" aria-live="polite"></section>
+        <section id="products" aria-live="polite" aria-atomic="false"></section>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Configuration -->
     <script src="assets/js/config.js"></script>
-    
-    <!-- Data -->
     <script src="assets/js/data/products.js"></script>
     <script src="assets/js/data/resellers.js"></script>
-    
-    <!-- Application Modules -->
     <script src="assets/js/modules/state.js"></script>
     <script src="assets/js/modules/utils.js"></script>
     <script src="assets/js/modules/pricing.js"></script>
