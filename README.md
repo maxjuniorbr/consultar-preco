@@ -13,13 +13,16 @@ This project is part of a usability test to validate how representatives interac
 * Display of resale price and profitability when a representative is identified
 * Automatic price display timeout (configurable)
 * Stacked product cards with timed removal
+* Persistent error messages for better user feedback
 * Responsive layout optimized for tablets
-* Fully static implementation using HTML, CSS (Bootstrap), and JavaScript
+* Accessible HTML5 semantic structure
+* Fully static implementation using HTML, CSS, and JavaScript
 
 ## Structure
 
-* `index.html` – main interface
-* `script.js` – core logic and event handling
+* `index.html` – main interface with semantic HTML5 elements
+* `style.css` – centralized styles and CSS variables
+* `script.js` – core logic with organized state management
 * `products.js` – static product database
 * `resellers.js` – sample reseller data
 
