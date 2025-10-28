@@ -43,7 +43,16 @@ function executeProductSearch(query) {
             input_length: query.length,
             has_reseller: appState.currentReseller !== null
         });
+        
+        if (MAX_DISPLAYED_PRODUCTS === 1) {
+            appState.displayedProducts = [];
+        }
+        
         showProductNotFoundMessage();
+        
+        if (appState.isResellerModeEnabled && appState.currentReseller) {
+            startSessionTimer();
+        }
     }
 
     clearProductSearchField();

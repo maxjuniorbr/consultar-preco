@@ -11,13 +11,13 @@ function handleResellerInput(event) {
     
     if (query === '') {
         appState.currentReseller = null;
+        appState.displayedProducts = [];
         clearSessionTimer();
         clearErrorMessage();
         renderAllProducts();
         return;
     }
 
-    // Detect input method (scanner detection: fast input)
     const inputSpeed = query.length > 5 ? 'scanner' : 'manual';
 
     appState.resellerTypingDebounceId = setTimeout(() => {
@@ -62,5 +62,20 @@ function handleResellerFocus(event) {
 }
 
 function handleResellerBlur(event) {
-    // No action needed on blur
+    if (appState.resellerTypingDebounceId) {
+        clearTimeout(appState.resellerTypingDebounceId);
+        appState.resellerTypingDebounceId = null;
+
+        const sanitized = sanitizeDigits(event.target.value);
+        event.target.value = sanitized;
+
+        const query = sanitized.trim();
+        if (query) {
+            trackEvent('reseller_input_method', {
+                input_method: 'blur',
+                input_length: query.length
+            });
+            identifyReseller(query);
+        }
+    }
 }

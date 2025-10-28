@@ -402,6 +402,37 @@ h2 {
     }
 }
 
+#resetSessionBtn {
+    width: 100%;
+    margin-top: 0.75rem;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    background: #E8EDF2;
+    color: var(--text-primary);
+    border: 2px solid var(--accent-color);
+    border-radius: 8px;
+    touch-action: manipulation;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+#resetSessionBtn:hover {
+    background: var(--surface-color);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+#resetSessionBtn:active {
+    background: var(--border-color);
+    transform: scale(0.98);
+}
+
+#resetSessionBtn:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
 .visually-hidden {
     position: absolute;
     width: 1px;

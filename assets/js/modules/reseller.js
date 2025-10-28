@@ -26,13 +26,17 @@ function identifyReseller(input) {
     }
 
     appState.currentReseller = null;
+    
+    if (MAX_DISPLAYED_PRODUCTS === 1) {
+        appState.displayedProducts = [];
+    }
+    
     showResellerNotFoundMessage();
     trackEvent('reseller_not_found', {
         input_value: cleanInput
     });
     console.log('Reseller not found');
     
-    // Return focus to reseller field
     if (dom.resellerInput) {
         dom.resellerInput.focus();
     }

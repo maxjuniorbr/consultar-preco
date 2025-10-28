@@ -1,6 +1,3 @@
-// Product data for price consultation
-// baseRetailPrice: suggested retail price for end customers
-// Purchase price and profit are calculated based on reseller classification discount
 const products = [
     {
         "code": "001",

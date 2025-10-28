@@ -12,7 +12,6 @@ function handleProductInput(event) {
         return;
     }
 
-    // Track typing (scanner detection: input rápido)
     const inputSpeed = query.length > 5 ? 'scanner' : 'manual';
 
     appState.typingDebounceId = setTimeout(() => {
@@ -52,4 +51,23 @@ function handleProductKeyPress(event) {
 
 function handleProductFocus(event) {
     event.target.select();
+}
+
+function handleProductBlur(event) {
+    if (appState.typingDebounceId) {
+        clearTimeout(appState.typingDebounceId);
+        appState.typingDebounceId = null;
+
+        const sanitized = sanitizeDigits(event.target.value);
+        event.target.value = sanitized;
+
+        const query = sanitized.trim();
+        if (query && canExecuteSearch()) {
+            trackEvent('product_input_method', {
+                input_method: 'blur',
+                input_length: query.length
+            });
+            executeProductSearch(query);
+        }
+    }
 }

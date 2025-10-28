@@ -15,5 +15,6 @@ const dom = {
     resellerInput: document.getElementById('reInput'),
     productSearch: document.getElementById('productSearch'),
     productsDiv: document.getElementById('products'),
-    sessionTimer: document.getElementById('sessionTimer')
+    sessionTimer: document.getElementById('sessionTimer'),
+    resetSessionBtn: document.getElementById('resetSessionBtn')
 };

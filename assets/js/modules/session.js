@@ -5,16 +5,24 @@ function startSessionTimer() {
         return;
     }
     
-    appState.sessionTimeRemaining = SESSION_TIMEOUT_SECONDS;
-    updateSessionTimerDisplay();
+    showResetButton();
     
-    if (dom.sessionTimer) {
-        dom.sessionTimer.style.display = 'block';
+    appState.sessionTimeRemaining = SESSION_TIMEOUT_SECONDS;
+    
+    if (SESSION_TIMER_CONFIG.showTimer) {
+        updateSessionTimerDisplay();
+        
+        if (dom.sessionTimer) {
+            dom.sessionTimer.style.display = 'block';
+        }
     }
     
     appState.sessionCountdownId = setInterval(() => {
         appState.sessionTimeRemaining--;
-        updateSessionTimerDisplay();
+        
+        if (SESSION_TIMER_CONFIG.showTimer) {
+            updateSessionTimerDisplay();
+        }
         
         if (appState.sessionTimeRemaining <= 0) {
             clearSessionTimer();
@@ -46,14 +54,42 @@ function updateSessionTimerDisplay() {
 
 function clearResellerSession() {
     appState.currentReseller = null;
+    appState.displayedProducts = [];
     
     if (dom.resellerInput) {
         dom.resellerInput.value = '';
     }
     
     clearSessionTimer();
+    hideResetButton();
+    clearErrorMessage();
     renderAllProducts();
     setInitialFocus();
     
     console.log('Reseller session expired');
+}
+
+function showResetButton() {
+    if (!SESSION_TIMER_CONFIG.showResetButton || !dom.resetSessionBtn) {
+        return;
+    }
+    
+    if (appState.isResellerModeEnabled && appState.currentReseller) {
+        dom.resetSessionBtn.style.display = 'block';
+    }
+}
+
+function hideResetButton() {
+    if (dom.resetSessionBtn) {
+        dom.resetSessionBtn.style.display = 'none';
+    }
+}
+
+function handleResetSession() {
+    trackEvent('session_reset_manual', {
+        reseller_code: appState.currentReseller?.code,
+        reseller_name: appState.currentReseller?.name
+    });
+    
+    clearResellerSession();
 }
