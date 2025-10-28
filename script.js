@@ -7,7 +7,7 @@ const appState = {
     currentReseller: null,
     displayedProducts: [],
     typingDebounceId: null,
-    currentErrorElement: null  // Armazena a referência da mensagem de erro atual
+    currentErrorElement: null
 };
 
 // DOM element references
@@ -30,8 +30,27 @@ function initialize() {
     controlResellerFieldVisibility();
     setInitialFocus();
     showInitialMessage();
+    trackPageView();
 
     console.log('Reseller Flag:', appState.resellerFlag ? 'ENABLED (showing reseller field + reseller price and profitability)' : 'DISABLED (hiding reseller field + showing only price)');
+}
+
+// Google Analytics Tracking
+function trackPageView() {
+    if (typeof gtag === 'function') {
+        gtag('event', 'page_view', {
+            page_title: 'Consulta de Preços - Tablet',
+            page_location: window.location.href,
+            screen_resolution: `${window.screen.width}x${window.screen.height}`,
+            screen_orientation: window.screen.orientation ? window.screen.orientation.type : 'unknown'
+        });
+    }
+}
+
+function trackEvent(eventName, eventParams = {}) {
+    if (typeof gtag === 'function') {
+        gtag('event', eventName, eventParams);
+    }
 }
 
 function sanitizeDigits(value) {
@@ -87,11 +106,18 @@ function identifyReseller(input) {
 
     if (found) {
         appState.currentReseller = found;
+        trackEvent('reseller_identified', {
+            reseller_code: found.code,
+            input_type: cleanInput.length === 11 ? 'cpf' : 'code'
+        });
         console.log('Reseller identified:', appState.currentReseller.name);
         return;
     }
 
     appState.currentReseller = null;
+    trackEvent('reseller_not_found', {
+        input_value: cleanInput
+    });
     console.log('Reseller not found');
 }
 
@@ -109,14 +135,27 @@ function canExecuteSearch() {
 }
 
 function executeProductSearch(query) {
-    // Remove mensagem de erro anterior ao iniciar nova busca
     clearErrorMessage();
 
+    const startTime = Date.now();
     const results = filterProducts(query);
 
     if (results.length > 0) {
+        const searchTime = Date.now() - startTime;
+        trackEvent('product_search_success', {
+            product_code: results[0].code,
+            product_name: results[0].name,
+            search_time_ms: searchTime,
+            input_length: query.length,
+            has_reseller: appState.currentReseller !== null
+        });
         addProductToDisplay(results[0]);
     } else {
+        trackEvent('product_search_failed', {
+            search_query: query,
+            input_length: query.length,
+            has_reseller: appState.currentReseller !== null
+        });
         showProductNotFoundMessage();
     }
 
@@ -184,7 +223,6 @@ function showInitialMessage() {
 }
 
 function clearErrorMessage() {
-    // Remove a mensagem de erro se existir
     if (appState.currentErrorElement && appState.currentErrorElement.parentNode) {
         appState.currentErrorElement.remove();
         appState.currentErrorElement = null;
@@ -196,17 +234,14 @@ function showProductNotFoundMessage() {
         return;
     }
 
-    // Remove mensagem de erro anterior, se existir
     clearErrorMessage();
 
     const errorDiv = document.createElement('div');
     errorDiv.className = 'alert-error';
     errorDiv.innerHTML = 'Produto não encontrado. Verifique o código e tente novamente.';
 
-    // Armazena referência da mensagem de erro
     appState.currentErrorElement = errorDiv;
 
-    // Insere sempre no início, independente de ter produtos
     dom.productsDiv.insertBefore(errorDiv, dom.productsDiv.firstChild);
 }
 
@@ -215,19 +250,15 @@ function renderAllProducts() {
         return;
     }
 
-    // Preserva a mensagem de erro se existir
     const errorElement = appState.currentErrorElement;
 
-    // Limpa apenas o conteúdo, mas preserva a referência da mensagem de erro
     dom.productsDiv.innerHTML = '';
 
-    // Reinsere a mensagem de erro se ela existir
     if (errorElement) {
         dom.productsDiv.appendChild(errorElement);
     }
 
     if (appState.displayedProducts.length === 0) {
-        // Só mostra mensagem inicial se não houver erro
         if (!errorElement) {
             showInitialMessage();
         }
@@ -320,7 +351,14 @@ function handleProductInput(event) {
         return;
     }
 
+    // Track typing (scanner detection: input rápido)
+    const inputSpeed = query.length > 5 ? 'scanner' : 'manual';
+
     appState.typingDebounceId = setTimeout(() => {
+        trackEvent('product_input_method', {
+            input_method: inputSpeed,
+            input_length: query.length
+        });
         executeProductSearch(query);
         appState.typingDebounceId = null;
     }, 1000);
@@ -342,6 +380,11 @@ function handleProductKeyPress(event) {
     if (!query || !canExecuteSearch()) {
         return;
     }
+
+    trackEvent('product_input_method', {
+        input_method: 'enter_key',
+        input_length: query.length
+    });
 
     executeProductSearch(query);
 }
