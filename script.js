@@ -1,15 +1,22 @@
 const DISPLAY_TIME_SECONDS = 10;
 const MAX_DISPLAYED_PRODUCTS = 5;
 
-let resellerFlag = false;
-let currentReseller = null;
-let displayedProducts = [];
-let typingDebounceId = null;
+// Application state management
+const appState = {
+    resellerFlag: false,
+    currentReseller: null,
+    displayedProducts: [],
+    typingDebounceId: null,
+    currentErrorElement: null  // Armazena a referência da mensagem de erro atual
+};
 
-const resellerGroup = document.getElementById('reGroup');
-const resellerInput = document.getElementById('reInput');
-const productSearch = document.getElementById('productSearch');
-const productsDiv = document.getElementById('products');
+// DOM element references
+const dom = {
+    resellerGroup: document.getElementById('reGroup'),
+    resellerInput: document.getElementById('reInput'),
+    productSearch: document.getElementById('productSearch'),
+    productsDiv: document.getElementById('products')
+};
 
 document.addEventListener('DOMContentLoaded', initialize);
 
@@ -17,14 +24,14 @@ function initialize() {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('re')) {
         const flagValue = urlParams.get('re');
-        resellerFlag = flagValue === 'true' || flagValue === '1';
+        appState.resellerFlag = flagValue === 'true' || flagValue === '1';
     }
 
     controlResellerFieldVisibility();
     setInitialFocus();
     showInitialMessage();
 
-    console.log('Reseller Flag:', resellerFlag ? 'ENABLED (showing reseller field + reseller price and profitability)' : 'DISABLED (hiding reseller field + showing only price)');
+    console.log('Reseller Flag:', appState.resellerFlag ? 'ENABLED (showing reseller field + reseller price and profitability)' : 'DISABLED (hiding reseller field + showing only price)');
 }
 
 function sanitizeDigits(value) {
@@ -32,38 +39,38 @@ function sanitizeDigits(value) {
 }
 
 function clearProductSearchField() {
-    if (!productSearch) {
+    if (!dom.productSearch) {
         return;
     }
 
-    productSearch.value = '';
-    productSearch.focus();
+    dom.productSearch.value = '';
+    dom.productSearch.focus();
 }
 
 function setInitialFocus() {
-    if (resellerFlag && resellerInput) {
-        resellerInput.focus();
+    if (appState.resellerFlag && dom.resellerInput) {
+        dom.resellerInput.focus();
         return;
     }
 
-    if (productSearch) {
-        productSearch.focus();
+    if (dom.productSearch) {
+        dom.productSearch.focus();
     }
 }
 
 function controlResellerFieldVisibility() {
-    if (!resellerGroup) {
+    if (!dom.resellerGroup) {
         return;
     }
 
-    resellerGroup.style.display = resellerFlag ? 'block' : 'none';
+    dom.resellerGroup.style.display = appState.resellerFlag ? 'block' : 'none';
 }
 
 function setResellerFlag(value) {
-    resellerFlag = value;
+    appState.resellerFlag = value;
     controlResellerFieldVisibility();
     setInitialFocus();
-    console.log('Reseller Flag changed to:', resellerFlag ? 'ENABLED' : 'DISABLED');
+    console.log('Reseller Flag changed to:', appState.resellerFlag ? 'ENABLED' : 'DISABLED');
     renderAllProducts();
 }
 
@@ -71,7 +78,7 @@ window.setResellerFlag = setResellerFlag;
 
 function identifyReseller(input) {
     if (!input) {
-        currentReseller = null;
+        appState.currentReseller = null;
         return;
     }
 
@@ -79,29 +86,32 @@ function identifyReseller(input) {
     const found = resellers.find(reseller => reseller.code === cleanInput || reseller.cpf === cleanInput);
 
     if (found) {
-        currentReseller = found;
-        console.log('Reseller identified:', currentReseller.name);
+        appState.currentReseller = found;
+        console.log('Reseller identified:', appState.currentReseller.name);
         return;
     }
 
-    currentReseller = null;
+    appState.currentReseller = null;
     console.log('Reseller not found');
 }
 
 function canExecuteSearch() {
-    if (!productSearch) {
+    if (!dom.productSearch) {
         return false;
     }
 
-    const productValue = productSearch.value.trim();
-    if (resellerFlag) {
-        return currentReseller !== null && productValue !== '';
+    const productValue = dom.productSearch.value.trim();
+    if (appState.resellerFlag) {
+        return appState.currentReseller !== null && productValue !== '';
     }
 
     return productValue !== '';
 }
 
 function executeProductSearch(query) {
+    // Remove mensagem de erro anterior ao iniciar nova busca
+    clearErrorMessage();
+
     const results = filterProducts(query);
 
     if (results.length > 0) {
@@ -114,15 +124,15 @@ function executeProductSearch(query) {
 }
 
 function addProductToDisplay(product) {
-    const existingIndex = displayedProducts.findIndex(item => item.product.code === product.code);
+    const existingIndex = appState.displayedProducts.findIndex(item => item.product.code === product.code);
 
     if (existingIndex !== -1) {
-        clearTimeout(displayedProducts[existingIndex].timeoutId);
-        displayedProducts.splice(existingIndex, 1);
+        clearTimeout(appState.displayedProducts[existingIndex].timeoutId);
+        appState.displayedProducts.splice(existingIndex, 1);
     }
 
-    if (displayedProducts.length >= MAX_DISPLAYED_PRODUCTS) {
-        const oldest = displayedProducts.shift();
+    if (appState.displayedProducts.length >= MAX_DISPLAYED_PRODUCTS) {
+        const oldest = appState.displayedProducts.shift();
         clearTimeout(oldest.timeoutId);
     }
 
@@ -130,7 +140,7 @@ function addProductToDisplay(product) {
         removeProductFromDisplay(product.code);
     }, DISPLAY_TIME_SECONDS * 1000);
 
-    displayedProducts.push({
+    appState.displayedProducts.push({
         product: product,
         timeoutId: timeoutId,
         timestamp: Date.now()
@@ -140,12 +150,12 @@ function addProductToDisplay(product) {
 }
 
 function removeProductFromDisplay(productCode) {
-    const index = displayedProducts.findIndex(item => item.product.code === productCode);
+    const index = appState.displayedProducts.findIndex(item => item.product.code === productCode);
     if (index === -1) {
         return;
     }
 
-    displayedProducts.splice(index, 1);
+    appState.displayedProducts.splice(index, 1);
     renderAllProducts();
 }
 
@@ -165,65 +175,77 @@ function filterProducts(query) {
 }
 
 function showInitialMessage() {
-    if (!productsDiv) {
+    if (!dom.productsDiv) {
         return;
     }
 
-    productsDiv.innerHTML = '<div class="alert-busca">Digite ou escaneie o código ou EAN para buscar um produto</div>';
+    clearErrorMessage();
+    dom.productsDiv.innerHTML = '<div class="alert-busca">Digite ou escaneie o código ou EAN para buscar um produto</div>';
+}
+
+function clearErrorMessage() {
+    // Remove a mensagem de erro se existir
+    if (appState.currentErrorElement && appState.currentErrorElement.parentNode) {
+        appState.currentErrorElement.remove();
+        appState.currentErrorElement = null;
+    }
 }
 
 function showProductNotFoundMessage() {
-    if (!productsDiv) {
+    if (!dom.productsDiv) {
         return;
     }
+
+    // Remove mensagem de erro anterior, se existir
+    clearErrorMessage();
 
     const errorDiv = document.createElement('div');
     errorDiv.className = 'alert-error';
     errorDiv.innerHTML = 'Produto não encontrado. Verifique o código e tente novamente.';
 
-    if (displayedProducts.length > 0) {
-        productsDiv.insertBefore(errorDiv, productsDiv.firstChild);
-    } else {
-        productsDiv.innerHTML = '';
-        productsDiv.appendChild(errorDiv);
-    }
+    // Armazena referência da mensagem de erro
+    appState.currentErrorElement = errorDiv;
 
-    setTimeout(() => {
-        if (!errorDiv.parentNode) {
-            return;
-        }
-
-        errorDiv.remove();
-        if (displayedProducts.length === 0) {
-            showInitialMessage();
-        }
-    }, 3000);
+    // Insere sempre no início, independente de ter produtos
+    dom.productsDiv.insertBefore(errorDiv, dom.productsDiv.firstChild);
 }
 
 function renderAllProducts() {
-    if (!productsDiv) {
+    if (!dom.productsDiv) {
         return;
     }
 
-    productsDiv.innerHTML = '';
+    // Preserva a mensagem de erro se existir
+    const errorElement = appState.currentErrorElement;
 
-    if (displayedProducts.length === 0) {
-        showInitialMessage();
+    // Limpa apenas o conteúdo, mas preserva a referência da mensagem de erro
+    dom.productsDiv.innerHTML = '';
+
+    // Reinsere a mensagem de erro se ela existir
+    if (errorElement) {
+        dom.productsDiv.appendChild(errorElement);
+    }
+
+    if (appState.displayedProducts.length === 0) {
+        // Só mostra mensagem inicial se não houver erro
+        if (!errorElement) {
+            showInitialMessage();
+        }
         return;
     }
 
-    if (resellerFlag && currentReseller) {
+    if (appState.resellerFlag && appState.currentReseller) {
         const resellerBanner = document.createElement('div');
         resellerBanner.className = 'reseller-banner';
         resellerBanner.innerHTML = `
       <div class="reseller-info">
-        Preço para <strong>${currentReseller.name}</strong> (cód. ${currentReseller.code})
+        Preço para <strong>${appState.currentReseller.name}</strong> (cód. ${appState.currentReseller.code})
       </div>
     `;
-        productsDiv.appendChild(resellerBanner);
+        dom.productsDiv.appendChild(resellerBanner);
     }
 
-    displayedProducts.slice().reverse().forEach(item => {
+    appState.displayedProducts.slice().reverse().forEach(item => {
         const { product } = item;
         const card = document.createElement('div');
         card.className = 'produto-card';
@@ -234,7 +256,7 @@ function renderAllProducts() {
       <div class="produto-info">
         <div class="produto-nome">${product.name}</div>
         <div class="produto-preco">R$ ${product.price.toFixed(2)}</div>
-        ${(resellerFlag && currentReseller) ? `
+        ${(appState.resellerFlag && appState.currentReseller) ? `
           <div class="produto-detalhes">
             <div class="produto-detalhes-item">
               <span class="produto-detalhes-label">Preço Revenda</span>
@@ -249,7 +271,7 @@ function renderAllProducts() {
       </div>
     `;
 
-        productsDiv.appendChild(card);
+        dom.productsDiv.appendChild(card);
     });
 }
 
@@ -260,7 +282,7 @@ function handleResellerInput(event) {
     }
 
     if (sanitized === '') {
-        currentReseller = null;
+        appState.currentReseller = null;
         renderAllProducts();
     }
 }
@@ -272,8 +294,8 @@ function handleResellerKeyPress(event) {
 
     event.preventDefault();
     identifyReseller(event.target.value.trim());
-    if (productSearch) {
-        productSearch.focus();
+    if (dom.productSearch) {
+        dom.productSearch.focus();
     }
 }
 
@@ -290,17 +312,17 @@ function handleProductInput(event) {
         event.target.value = sanitized;
     }
 
-    clearTimeout(typingDebounceId);
-    typingDebounceId = null;
+    clearTimeout(appState.typingDebounceId);
+    appState.typingDebounceId = null;
 
     const query = sanitized.trim();
     if (!query || !canExecuteSearch()) {
         return;
     }
 
-    typingDebounceId = setTimeout(() => {
+    appState.typingDebounceId = setTimeout(() => {
         executeProductSearch(query);
-        typingDebounceId = null;
+        appState.typingDebounceId = null;
     }, 1000);
 }
 
@@ -310,8 +332,8 @@ function handleProductKeyPress(event) {
     }
 
     event.preventDefault();
-    clearTimeout(typingDebounceId);
-    typingDebounceId = null;
+    clearTimeout(appState.typingDebounceId);
+    appState.typingDebounceId = null;
 
     const sanitized = sanitizeDigits(event.target.value);
     event.target.value = sanitized;
@@ -328,14 +350,14 @@ function handleProductFocus(event) {
     event.target.select();
 }
 
-if (resellerInput) {
-    resellerInput.addEventListener('input', handleResellerInput);
-    resellerInput.addEventListener('keypress', handleResellerKeyPress);
-    resellerInput.addEventListener('blur', handleResellerBlur);
+if (dom.resellerInput) {
+    dom.resellerInput.addEventListener('input', handleResellerInput);
+    dom.resellerInput.addEventListener('keypress', handleResellerKeyPress);
+    dom.resellerInput.addEventListener('blur', handleResellerBlur);
 }
 
-if (productSearch) {
-    productSearch.addEventListener('input', handleProductInput);
-    productSearch.addEventListener('keypress', handleProductKeyPress);
-    productSearch.addEventListener('focus', handleProductFocus);
+if (dom.productSearch) {
+    dom.productSearch.addEventListener('input', handleProductInput);
+    dom.productSearch.addEventListener('keypress', handleProductKeyPress);
+    dom.productSearch.addEventListener('focus', handleProductFocus);
 }
