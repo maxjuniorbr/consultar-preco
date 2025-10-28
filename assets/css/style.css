@@ -143,7 +143,6 @@ h2 {
 .produto-detalhes-label {
     font-size: 0.85rem;
     color: var(--text-secondary);
-    text-transform: uppercase;
     margin-bottom: 0.2rem;
     font-weight: 500;
 }
@@ -152,6 +151,71 @@ h2 {
     font-size: 1.1rem;
     font-weight: 600;
     color: var(--hover-color);
+}
+
+.tabela-precos {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.tabela-precos-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.tabela-precos-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    background: var(--bg-light);
+    border-radius: 6px;
+    transition: background 0.2s ease;
+    overflow: hidden;
+}
+
+.tabela-precos-row:hover {
+    background: #f0f2f5;
+}
+
+.tabela-precos-classification {
+    flex-shrink: 0;
+    width: 90px;
+    text-align: center;
+}
+
+.tabela-precos-values {
+    display: flex;
+    gap: 0.75rem;
+    flex: 1;
+    flex-wrap: wrap;
+    min-width: 0;
+}
+
+.tabela-precos-item {
+    display: flex;
+    flex-direction: column;
+    min-width: 90px;
+    flex: 1;
+}
+
+.tabela-precos-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.1rem;
+    font-weight: 500;
+}
+
+.tabela-precos-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--hover-color);
+}
+
+.tabela-precos-value.profit {
+    color: #28a745;
 }
 
 .alert-busca {
@@ -184,13 +248,158 @@ h2 {
 
 .reseller-info {
     color: var(--surface-color);
-    font-size: 1.15rem;
     text-align: center;
-    font-weight: 400;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
 }
 
-.reseller-info strong {
+.reseller-name {
+    font-size: 1.25rem;
     font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.reseller-details {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.reseller-code {
+    color: var(--surface-color);
+    opacity: 0.9;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.reseller-discount {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: linear-gradient(135deg, #4caf50, #45a049);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.5px;
+}
+
+.reseller-classification {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.reseller-classification.bronze {
+    background: linear-gradient(135deg, #cd7f32, #b87333);
+    color: #fff;
+}
+
+.reseller-classification.prata {
+    background: linear-gradient(135deg, #c0c0c0, #a8a8a8);
+    color: #333;
+}
+
+.reseller-classification.ouro {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #333;
+}
+
+.reseller-classification.platina {
+    background: linear-gradient(135deg, #e5e4e2, #d3d3d3);
+    color: #333;
+}
+
+.reseller-classification.rubi {
+    background: linear-gradient(135deg, #e0115f, #c41e3a);
+    color: #fff;
+}
+
+.reseller-classification.esmeralda {
+    background: linear-gradient(135deg, #50c878, #3cb371);
+    color: #fff;
+}
+
+.reseller-classification.diamante {
+    background: linear-gradient(135deg, #b9f2ff, #7dd3f0);
+    color: #333;
+    border: 2px solid #4db8e8;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.badge-bronze {
+    background: linear-gradient(135deg, #cd7f32, #b87333);
+    color: #fff;
+}
+
+.badge-prata {
+    background: linear-gradient(135deg, #c0c0c0, #a8a8a8);
+    color: #1a1a1a;
+}
+
+.badge-ouro {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #1a1a1a;
+}
+
+.badge-platina {
+    background: linear-gradient(135deg, #e5e4e2, #d3d3d3);
+    color: #1a1a1a;
+}
+
+.badge-rubi {
+    background: linear-gradient(135deg, #e0115f, #c41e3a);
+    color: #fff;
+}
+
+.badge-esmeralda {
+    background: linear-gradient(135deg, #50c878, #3cb371);
+    color: #fff;
+}
+
+.badge-diamante {
+    background: linear-gradient(135deg, #b9f2ff, #7dd3f0);
+    color: #1a1a1a;
+    border: 1.5px solid #4db8e8;
+}
+
+.session-timer {
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: linear-gradient(135deg, #ffc107, #ff9800);
+    color: #000;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+    animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.85;
+    }
 }
 
 .visually-hidden {
