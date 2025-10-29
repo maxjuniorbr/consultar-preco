@@ -5,18 +5,25 @@ function identifyReseller(input) {
     }
 
     const cleanInput = sanitizeDigits(input);
+    const inputType = cleanInput.length === 11 ? 'CPF' : 'Code';
+    
+    console.log(`[Reseller Search] Input: "${cleanInput}" | Type: ${inputType}`);
+    
     const found = resellers.find(reseller => reseller.code === cleanInput || reseller.cpf === cleanInput);
 
     if (found) {
         appState.currentReseller = found;
         clearErrorMessage();
+        
+        const discount = getDiscountPercentage(found.classification);
+        console.log(`[Reseller Identified] ${found.name} | Classification: ${found.classification} | Discount: ${discount}%`);
+        
         trackEvent('reseller_identified', {
             reseller_code: found.code,
             classification: found.classification,
-            discount_percentage: getDiscountPercentage(found.classification),
-            input_type: cleanInput.length === 11 ? 'cpf' : 'code'
+            discount_percentage: discount,
+            input_type: inputType.toLowerCase()
         });
-        console.log('Reseller identified:', appState.currentReseller.name);
         
         if (dom.productSearch) {
             dom.productSearch.focus();
@@ -31,11 +38,13 @@ function identifyReseller(input) {
         appState.displayedProducts = [];
     }
     
+    console.warn(`[Reseller Not Found] Input: "${cleanInput}"`);
+    
     showResellerNotFoundMessage();
     trackEvent('reseller_not_found', {
-        input_value: cleanInput
+        input_value: cleanInput,
+        input_type: inputType.toLowerCase()
     });
-    console.log('Reseller not found');
     
     if (dom.resellerInput) {
         dom.resellerInput.focus();

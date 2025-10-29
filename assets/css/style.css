@@ -240,51 +240,73 @@ h2 {
 
 .reseller-banner {
     background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
-    padding: 1.2rem 1.5rem;
-    border-radius: 10px;
+    padding: 1.5rem;
+    border-radius: 12px;
     margin-bottom: 1.5rem;
-    box-shadow: 0 3px 10px rgba(0, 45, 88, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 45, 88, 0.2);
 }
 
-.reseller-info {
-    color: var(--surface-color);
-    text-align: center;
+.reseller-banner-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.reseller-classification-badge {
+    flex-shrink: 0;
+}
+
+.reseller-classification-img-large {
+    height: 80px;
+    width: auto;
+    display: block;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.reseller-info-details {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
 }
 
 .reseller-name {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 700;
-    letter-spacing: 0.3px;
+    color: var(--surface-color);
+    letter-spacing: 0.5px;
+    line-height: 1.2;
 }
 
-.reseller-details {
+.reseller-metadata {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
+    gap: 1rem;
     flex-wrap: wrap;
 }
 
 .reseller-code {
     color: var(--surface-color);
-    opacity: 0.9;
-    font-size: 0.9rem;
+    opacity: 0.95;
+    font-size: 0.95rem;
     font-weight: 500;
+    padding: 0.35rem 0.85rem;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    backdrop-filter: blur(10px);
 }
 
 .reseller-discount {
     display: inline-block;
-    padding: 0.25rem 0.75rem;
+    padding: 0.35rem 0.85rem;
     background: linear-gradient(135deg, #4caf50, #45a049);
-    border-radius: 20px;
-    font-size: 0.9rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
     font-weight: 700;
     color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
     letter-spacing: 0.5px;
 }
 
@@ -381,6 +403,24 @@ h2 {
     border: 1.5px solid #4db8e8;
 }
 
+.classification-badge-img {
+    height: 40px;
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+    object-fit: contain;
+}
+
+.reseller-classification-img {
+    height: 28px;
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+    object-fit: contain;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
 .session-timer {
     margin-top: 0.5rem;
     padding: 0.5rem 0.75rem;
@@ -464,6 +504,19 @@ h2 {
     }
 
     .produto-detalhes {
+        justify-content: center;
+    }
+    
+    .reseller-banner-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .reseller-classification-img-large {
+        height: 70px;
+    }
+    
+    .reseller-metadata {
         justify-content: center;
     }
 }

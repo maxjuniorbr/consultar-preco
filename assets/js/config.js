@@ -20,3 +20,4 @@ const CLASSIFICATION_DISCOUNTS = {
     "Diamante": 35
 };
 const CLASSIFICATION_ORDER = ["Bronze", "Prata", "Ouro", "Platina", "Rubi", "Esmeralda", "Diamante"];
+const AUTO_FOCUS_TIMEOUT_SECONDS = 5;

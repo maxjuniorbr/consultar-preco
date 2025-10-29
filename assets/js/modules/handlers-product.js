@@ -13,6 +13,8 @@ function handleProductInput(event) {
     }
 
     const inputSpeed = query.length > 5 ? 'scanner' : 'manual';
+    
+    console.log(`[Input] Product field | Method: ${inputSpeed} | Length: ${query.length}`);
 
     appState.typingDebounceId = setTimeout(() => {
         trackEvent('product_input_method', {
@@ -51,6 +53,7 @@ function handleProductKeyPress(event) {
 
 function handleProductFocus(event) {
     event.target.select();
+    clearAutoFocusTimer();
 }
 
 function handleProductBlur(event) {
@@ -70,4 +73,6 @@ function handleProductBlur(event) {
             executeProductSearch(query);
         }
     }
+    
+    startAutoFocusTimer();
 }

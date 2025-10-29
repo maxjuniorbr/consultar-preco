@@ -5,6 +5,8 @@ function startSessionTimer() {
         return;
     }
     
+    console.log(`[Session] Timer started - ${SESSION_TIMEOUT_SECONDS}s | Reseller: ${appState.currentReseller.name}`);
+    
     showResetButton();
     
     appState.sessionTimeRemaining = SESSION_TIMEOUT_SECONDS;
@@ -25,6 +27,15 @@ function startSessionTimer() {
         }
         
         if (appState.sessionTimeRemaining <= 0) {
+            console.log('[Session] Timeout expired - Auto clearing session');
+            
+            trackEvent('session_timeout_expired', {
+                reseller_code: appState.currentReseller?.code,
+                reseller_name: appState.currentReseller?.name,
+                classification: appState.currentReseller?.classification,
+                timeout_seconds: SESSION_TIMEOUT_SECONDS
+            });
+            
             clearSessionTimer();
             clearResellerSession();
         }
@@ -53,6 +64,10 @@ function updateSessionTimerDisplay() {
 }
 
 function clearResellerSession() {
+    const resellerName = appState.currentReseller?.name || 'Unknown';
+    
+    console.log(`[Session] Cleared | Reseller: ${resellerName}`);
+    
     appState.currentReseller = null;
     appState.displayedProducts = [];
     
@@ -65,8 +80,6 @@ function clearResellerSession() {
     clearErrorMessage();
     renderAllProducts();
     setInitialFocus();
-    
-    console.log('Reseller session expired');
 }
 
 function showResetButton() {
@@ -86,9 +99,12 @@ function hideResetButton() {
 }
 
 function handleResetSession() {
+    console.log(`[Session] Manual reset by user | Reseller: ${appState.currentReseller?.name}`);
+    
     trackEvent('session_reset_manual', {
         reseller_code: appState.currentReseller?.code,
-        reseller_name: appState.currentReseller?.name
+        reseller_name: appState.currentReseller?.name,
+        classification: appState.currentReseller?.classification
     });
     
     clearResellerSession();

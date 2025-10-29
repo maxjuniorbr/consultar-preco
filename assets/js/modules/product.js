@@ -13,6 +13,8 @@ function canExecuteSearch() {
 
 function executeProductSearch(query) {
     clearErrorMessage();
+    
+    console.log(`[Product Search] Query: "${query}" | Length: ${query.length}`);
 
     const startTime = Date.now();
     const results = filterProducts(query);
@@ -20,6 +22,8 @@ function executeProductSearch(query) {
     if (results.length > 0) {
         const searchTime = Date.now() - startTime;
         const pricing = calculatePriceForReseller(results[0], appState.currentReseller);
+        
+        console.log(`[Product Found] ${results[0].name} | Code: ${results[0].code} | Price: R$ ${pricing.purchasePrice.toFixed(2)} | Time: ${searchTime}ms`);
         
         trackEvent('product_search_success', {
             product_code: results[0].code,
@@ -38,6 +42,8 @@ function executeProductSearch(query) {
             startSessionTimer();
         }
     } else {
+        console.warn(`[Product Not Found] Query: "${query}"`);
+        
         trackEvent('product_search_failed', {
             search_query: query,
             input_length: query.length,

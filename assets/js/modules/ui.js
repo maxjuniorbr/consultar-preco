@@ -60,26 +60,42 @@ function renderAllProducts() {
     if (appState.isResellerModeEnabled && appState.currentReseller) {
         const discountPercentage = getDiscountPercentage(appState.currentReseller.classification);
         
+        console.log(`[UI] Rendering reseller banner | ${appState.currentReseller.name} | ${appState.currentReseller.classification} | ${discountPercentage}% OFF`);
+        
         const resellerBanner = document.createElement('div');
         resellerBanner.className = 'reseller-banner';
         
-        let bannerContent = `<div class="reseller-info">
-            <div class="reseller-name">${appState.currentReseller.name}</div>
-            <div class="reseller-details">`;
+        let bannerContent = `
+            <div class="reseller-banner-content">`;
         
         if (RESELLER_BANNER_CONFIG.showClassification) {
-            bannerContent += `<span class="reseller-classification ${appState.currentReseller.classification.toLowerCase()}">${appState.currentReseller.classification}</span>`;
+            bannerContent += `
+                <div class="reseller-classification-badge">
+                    <img src="assets/images/${appState.currentReseller.classification.toLowerCase()}.svg" 
+                         alt="${appState.currentReseller.classification}" 
+                         class="reseller-classification-img-large"
+                         title="${appState.currentReseller.classification}">
+                </div>`;
+        }
+        
+        bannerContent += `
+                <div class="reseller-info-details">
+                    <div class="reseller-name">${appState.currentReseller.name}</div>
+                    <div class="reseller-metadata">`;
+        
+        if (RESELLER_BANNER_CONFIG.showCode) {
+            bannerContent += `<span class="reseller-code">Código: ${appState.currentReseller.code}</span>`;
         }
         
         if (RESELLER_BANNER_CONFIG.showDiscount) {
             bannerContent += `<span class="reseller-discount">${discountPercentage}% OFF</span>`;
         }
         
-        if (RESELLER_BANNER_CONFIG.showCode) {
-            bannerContent += `<span class="reseller-code">Cód. ${appState.currentReseller.code}</span>`;
-        }
+        bannerContent += `
+                    </div>
+                </div>
+            </div>`;
         
-        bannerContent += `</div></div>`;
         resellerBanner.innerHTML = bannerContent;
         
         dom.productsDiv.appendChild(resellerBanner);
@@ -131,7 +147,10 @@ function renderAllProducts() {
                 return `
                   <div class="tabela-precos-row" role="row">
                     <div class="tabela-precos-classification" role="cell">
-                      <span class="badge badge-${classification.toLowerCase()}">${classification}</span>
+                      <img src="assets/images/${classification.toLowerCase()}.svg" 
+                           alt="${classification}" 
+                           class="classification-badge-img"
+                           title="${classification}">
                     </div>
                     <div class="tabela-precos-values" role="cell">
                       <div class="tabela-precos-item">

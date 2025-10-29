@@ -7,7 +7,8 @@ const appState = {
     currentErrorElement: null,
     sessionTimeoutId: null,
     sessionCountdownId: null,
-    sessionTimeRemaining: 0
+    sessionTimeRemaining: 0,
+    autoFocusTimeoutId: null
 };
 
 const dom = {

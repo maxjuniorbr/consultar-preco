@@ -10,7 +10,17 @@ function initialize() {
     showInitialMessage();
     trackPageView();
 
-    console.log('Reseller mode:', appState.isResellerModeEnabled ? 'ENABLED (showing reseller field + reseller price and profitability)' : 'DISABLED (hiding reseller field + showing only price)');
+    console.log('='.repeat(60));
+    console.log('🛒 PRICE QUERY SYSTEM INITIALIZED');
+    console.log('='.repeat(60));
+    console.log(`Mode: ${appState.isResellerModeEnabled ? 'RESELLER (with RE)' : 'NORMAL (without RE)'}`);
+    console.log(`Display Time: ${DISPLAY_TIME_SECONDS}s`);
+    console.log(`Max Products: ${MAX_DISPLAYED_PRODUCTS}`);
+    console.log(`Auto-Focus Timeout: ${AUTO_FOCUS_TIMEOUT_SECONDS}s`);
+    if (appState.isResellerModeEnabled) {
+        console.log(`Session Timeout: ${SESSION_TIMEOUT_SECONDS}s`);
+    }
+    console.log('='.repeat(60));
 }
 
 function setupEventListeners() {
@@ -36,4 +46,5 @@ function setupEventListeners() {
 document.addEventListener('DOMContentLoaded', () => {
     initialize();
     setupEventListeners();
+    setupAutoFocusInteractionListeners();
 });

@@ -10,6 +10,7 @@ function handleResellerInput(event) {
     const query = sanitized.trim();
     
     if (query === '') {
+        console.log('[Input] Reseller field cleared');
         appState.currentReseller = null;
         appState.displayedProducts = [];
         clearSessionTimer();
@@ -19,6 +20,8 @@ function handleResellerInput(event) {
     }
 
     const inputSpeed = query.length > 5 ? 'scanner' : 'manual';
+    
+    console.log(`[Input] Reseller field | Method: ${inputSpeed} | Length: ${query.length}`);
 
     appState.resellerTypingDebounceId = setTimeout(() => {
         trackEvent('reseller_input_method', {
@@ -59,6 +62,7 @@ function handleResellerKeyPress(event) {
 
 function handleResellerFocus(event) {
     event.target.select();
+    clearAutoFocusTimer();
 }
 
 function handleResellerBlur(event) {
@@ -78,4 +82,6 @@ function handleResellerBlur(event) {
             identifyReseller(query);
         }
     }
+    
+    startAutoFocusTimer();
 }
