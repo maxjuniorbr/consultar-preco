@@ -14,10 +14,12 @@ Usability test prototype to validate representative interaction with price looku
 - Dynamic pricing based on reseller classification (7 levels: Bronze through Diamante)
 - Price table showing all classification tiers when no reseller is identified
 - Resale price and profitability display (when representative is identified)
+- Visual classification badges using images for better recognition
 - Automatic product card removal after configurable timeout
 - Scanner detection vs manual input with debounce
 - Immediate search on blur (TAB key or touch outside field)
 - Error messages for invalid products/representatives
+- Analytics integration (Google Analytics and Microsoft Clarity)
 - Manual session reset button (configurable)
 - Responsive layout optimized for tablets
 - Full accessibility support (WCAG compliant)
@@ -30,6 +32,7 @@ Usability test prototype to validate representative interaction with price looku
 ├── assets/
 │   ├── css/
 │   │   └── style.css         # Application styles
+│   ├── images/               # Classification badge images
 │   └── js/
 │       ├── config.js         # Configuration constants
 │       ├── data/
