@@ -66,14 +66,7 @@ Edit `assets/js/config.js` to adjust:
   - `showClassification` - Show classification badge (default: true)
   - `showDiscount` - Show discount percentage (default: true)
   - `showCode` - Show reseller code (default: true)
-- `CLASSIFICATION_DISCOUNTS` - Discount percentages by classification tier:
-  - Bronze: 20%
-  - Prata: 25%
-  - Ouro: 28%
-  - Platina: 30%
-  - Rubi: 32%
-  - Esmeralda: 34%
-  - Diamante: 35%
+- `CLASSIFICATION_DISCOUNTS` - Discount percentages by classification tier (configured per business rules)
 
 ## Usage Modes
 
