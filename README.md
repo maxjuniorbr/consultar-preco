@@ -28,28 +28,28 @@ Usability test prototype to validate representative interaction with price looku
 
 ```
 /
-├── index.html                 # Main HTML interface
-├── assets/
-│   ├── css/
-│   │   └── style.css         # Application styles
-│   ├── images/               # Classification badge images
-│   └── js/
-│       ├── config.js         # Configuration constants
-│       ├── data/
-│       │   ├── products.js   # Product data (mock)
-│       │   └── resellers.js  # Reseller data (mock)
+├── index.html                          # Main HTML interface
+├── assets/         
+│   ├── css/          
+│   │   └── style.css                   # Application styles
+│   ├── images/                         # Classification badge images
+│   └── js/         
+│       ├── config.js                   # Configuration constants
+│       ├── data/         
+│       │   ├── products.js             # Product data (mock)
+│       │   └── resellers.js            # Reseller data (mock)
 │       └── modules/
-│           ├── state.js      # State management
-│           ├── utils.js      # Utilities
-│           ├── analytics.js  # Analytics
-│           ├── session.js    # Session timer
-│           ├── reseller.js   # Reseller logic
-│           ├── product.js    # Product logic
-│           ├── pricing.js    # Price calculations
-│           ├── ui.js         # UI rendering
-│           ├── handlers-reseller.js
-│           ├── handlers-product.js
-│           └── app.js        # Initialization
+│           ├── state.js                # State management
+│           ├── utils.js                # Utilities
+│           ├── analytics.js            # Analytics
+│           ├── session.js              # Session timer
+│           ├── reseller.js             # Reseller logic
+│           ├── product.js              # Product logic
+│           ├── pricing.js              # Price calculations
+│           ├── ui.js                   # UI rendering
+│           ├── handlers-reseller.js    # Reseller input event handlers
+│           ├── handlers-product.js     # Product input event handlers
+│           └── app.js                  # Initialization
 ```
 
 ## Configuration
