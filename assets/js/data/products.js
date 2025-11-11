@@ -186,7 +186,7 @@ const products = [
         "ean": "7891033507054",
         "name": "Make B Blush Po C/Ac Polig Coral 5,5G",
         "baseRetailPrice": 79.90,
-        "image": "https://revendedores.grupoboticario.com.br/produto/blush-em-po-mate-luminoso-coral-make-b-55g?sku=50705"
+        "image": "https://res.cloudinary.com/beleza-na-web/image/upload/w_297,f_auto,fl_progressive,q_auto:best/v1/imagens/product/B50705/0d3fcdbb-c94b-4043-a936-8c081a7745c1-bot-50705-make-b-blush-coral-frontal-01.jpg"
     },
     {
         "code": "49901",
